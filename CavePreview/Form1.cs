@@ -52,12 +52,21 @@ namespace CavePreview
             for (int x = 0; x < width; x++)
                 for (int y = 0; y < height; y++)
                     image.SetPixel(x, y, automata.Data[x, y] ? Color.Black : Color.White);
-            preview.Image = image;
+
+            if (chkAutoEnhance.Checked)
+                btnEnhance_Click(null, EventArgs.Empty);
+            else
+                preview.Image = image;
         }
 
         private void btnEnhance_Click(object sender, EventArgs e)
         {
             preview.Image = CaveGenerator.EnhanceImage(automata);
+        }
+
+        private void chkAutoEnhance_CheckedChanged(object sender, EventArgs e)
+        {
+            btnEnhance.Enabled = !chkAutoEnhance.Checked;
         }
     }
 }
