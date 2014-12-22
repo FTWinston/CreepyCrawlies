@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveGen", "CaveGen\CaveGen.csproj", "{BF3F277F-38C5-4B8C-8E2A-680C524110D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CavePreview", "CavePreview\CavePreview.csproj", "{5003FA7A-2C99-43C8-818B-FCF80A410779}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF3F277F-38C5-4B8C-8E2A-680C524110D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF3F277F-38C5-4B8C-8E2A-680C524110D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF3F277F-38C5-4B8C-8E2A-680C524110D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF3F277F-38C5-4B8C-8E2A-680C524110D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5003FA7A-2C99-43C8-818B-FCF80A410779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5003FA7A-2C99-43C8-818B-FCF80A410779}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5003FA7A-2C99-43C8-818B-FCF80A410779}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5003FA7A-2C99-43C8-818B-FCF80A410779}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
