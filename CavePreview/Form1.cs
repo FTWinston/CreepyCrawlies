@@ -54,5 +54,10 @@ namespace CavePreview
                     image.SetPixel(x, y, automata.Data[x, y] ? Color.Black : Color.White);
             preview.Image = image;
         }
+
+        private void btnEnhance_Click(object sender, EventArgs e)
+        {
+            preview.Image = CaveGenerator.EnhanceImage(automata);
+        }
     }
 }

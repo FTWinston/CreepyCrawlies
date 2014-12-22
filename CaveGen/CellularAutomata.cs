@@ -50,6 +50,38 @@ namespace CaveGen
             }
         }
 
+        public bool Constrain(ref int x, ref int y)
+        {
+            var width = Data.GetLength(0);
+            var height = Data.GetLength(1);
+
+            if (x < 0)
+                if (LoopHorizontal)
+                    x += width;
+                else
+                    return false;
+
+            else if (x >= width)
+                if (LoopHorizontal)
+                    x -= width;
+                else
+                    return false;
+
+            if (y < 0)
+                if (LoopVertical)
+                    y += height;
+                else
+                    return false;
+
+            else if (y >= height)
+                if (LoopVertical)
+                    y -= height;
+                else
+                    return false;
+
+            return true;
+        }
+
         public class CellInfo
         {
             internal CellInfo(CellularAutomata<T> automata, int x, int y)
@@ -75,41 +107,10 @@ namespace CaveGen
                         if (inclusive || (Math.Abs(x - X) == distX || Math.Abs(y - Y) == distY))
                         {
                             int i = x, j = y;
-                            if (i < 0)
-                                if (Automata.LoopHorizontal)
-                                    i += Width;
-                                else
-                                {
-                                    yield return Automata.BoundaryState;
-                                    continue;
-                                }
-                            else if (i >= Width)
-                                if (Automata.LoopHorizontal)
-                                    i -= Width;
-                                else
-                                {
-                                    yield return Automata.BoundaryState;
-                                    continue;
-                                }
-
-                            if (j < 0)
-                                if (Automata.LoopVertical)
-                                    j += Height;
-                                else
-                                {
-                                    yield return Automata.BoundaryState;
-                                    continue;
-                                }
-                            else if (j >= Height)
-                                if (Automata.LoopVertical)
-                                    j -= Height;
-                                else
-                                {
-                                    yield return Automata.BoundaryState;
-                                    continue;
-                                }
-
-                            yield return data[i, j];
+                            if (Automata.Constrain(ref i, ref j))
+                                yield return data[i, j];
+                            else
+                                yield return Automata.BoundaryState;
                         }
             }
 
