@@ -22,25 +22,19 @@ namespace CaveGen
 
         public static bool GrowAndContract(CellularAutomata<bool>.CellInfo cellInfo)
         {
-            if (cellInfo.IsCorner)
-                return true; // corners should always stay solid
-
-            var numWalls = cellInfo.GetNeighbours(1, 1).Count(b => b) + (cellInfo.State ? 1 : 0);
-            if (numWalls >= 5)
+            var numWalls = cellInfo.GetNeighbours(2, 1, true).Count(b => b);
+            if (numWalls >= 8)
                 return true;
 
             // make stuff appear in the middle of large spaces
-            numWalls += cellInfo.GetNeighbours(2, 2).Count(b => b);
+            numWalls += cellInfo.GetNeighbours(3, 2).Count(b => b);
             return numWalls <= 1;
         }
 
         public static bool Contract(CellularAutomata<bool>.CellInfo cellInfo)
         {
-            if (cellInfo.IsCorner)
-                return true; // corners should always stay solid
-
-            var numWalls = cellInfo.GetNeighbours(1, 1).Count(b => b) + (cellInfo.State ? 1 : 0);
-            return numWalls >= 5;
+            var numWalls = cellInfo.GetNeighbours(2, 1, true).Count(b => b);
+            return numWalls >= 8;
         }
     }
 }
