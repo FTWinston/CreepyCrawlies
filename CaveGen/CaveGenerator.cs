@@ -63,12 +63,12 @@ namespace CaveGen
                     var groundBrush = (x + y) % 2 == 0 ? groundBrush1 : groundBrush2;
 
                     // check each corner in turn, to decide how to draw
-                    var tl = DetermineCornerFill(automata, x - 1, y, x, y - 1);
-                    var tr = DetermineCornerFill(automata, x + 1, y, x, y - 1);
-                    var bl = DetermineCornerFill(automata, x - 1, y, x, y + 1);
-                    var br = DetermineCornerFill(automata, x + 1, y, x, y + 1);
+                    var tl = ShouldFillCorner(automata, x - 1, y, x, y - 1);
+                    var tr = ShouldFillCorner(automata, x + 1, y, x, y - 1);
+                    var bl = ShouldFillCorner(automata, x - 1, y, x, y + 1);
+                    var br = ShouldFillCorner(automata, x + 1, y, x, y + 1);
 
-                    if (tl == CornerFill.None && tr == CornerFill.None && bl == CornerFill.None && br == CornerFill.None)
+                    if (!tl && !tr && !bl && !br)
                     {
                         g.FillRectangle(groundBrush, x * cellSize, y * cellSize, cellSize, cellSize);
                         continue;
@@ -76,72 +76,40 @@ namespace CaveGen
 
                     var points = new Point[4];
 
-                    switch (tl)
-                    {
-                        case CornerFill.Corner:
-                            points[0] = new Point(x * cellSize, y * cellSize); break;
-                        case CornerFill.Top:
-                            points[0] = new Point(x * cellSize + cellSize / 4, y * cellSize); break;
-                        case CornerFill.Side:
-                            points[0] = new Point(x * cellSize, y * cellSize + cellSize / 4); break;
-                        case CornerFill.None:
-                            points[0] = new Point(x * cellSize + cellSize / 4, y * cellSize + cellSize / 4); break;
-                    }
-                    switch (tr)
-                    {
-                        case CornerFill.Corner:
-                            points[1] = new Point(x * cellSize + cellSize, y * cellSize); break;
-                        case CornerFill.Top:
-                            points[1] = new Point(x * cellSize + 3 * cellSize / 4, y * cellSize); break;
-                        case CornerFill.Side:
-                            points[1] = new Point(x * cellSize + cellSize, y * cellSize + cellSize / 4); break;
-                        case CornerFill.None:
-                            points[1] = new Point(x * cellSize + 3 * cellSize / 4, y * cellSize + cellSize / 4); break;
-                    }
-                    switch (br)
-                    {
-                        case CornerFill.Corner:
-                            points[2] = new Point(x * cellSize + cellSize, y * cellSize + cellSize); break;
-                        case CornerFill.Top:
-                            points[2] = new Point(x * cellSize + 3 * cellSize / 4, y * cellSize + cellSize); break;
-                        case CornerFill.Side:
-                            points[2] = new Point(x * cellSize + cellSize, y * cellSize + 3 * cellSize / 4); break;
-                        case CornerFill.None:
-                            points[2] = new Point(x * cellSize + 3 *cellSize / 4, y * cellSize + 3 * cellSize / 4); break;
-                    }
-                    switch (bl)
-                    {
-                        case CornerFill.Corner:
-                            points[3] = new Point(x * cellSize, y * cellSize + cellSize); break;
-                        case CornerFill.Top:
-                            points[3] = new Point(x * cellSize + cellSize / 4, y * cellSize + cellSize); break;
-                        case CornerFill.Side:
-                            points[3] = new Point(x * cellSize, y * cellSize + 3 * cellSize / 4); break;
-                        case CornerFill.None:
-                            points[3] = new Point(x * cellSize + cellSize / 4, y * cellSize + 3 * cellSize / 4); break;
-                    }
+                    if (tl)
+                        points[0] = new Point(x * cellSize, y * cellSize);
+                    else
+                        points[0] = new Point(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2);
+                    
+                    if (tr)
+                        points[1] = new Point(x * cellSize + cellSize, y * cellSize);
+                    else
+                        points[1] = new Point(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2);
+                    
+                    if (br)
+                        points[2] = new Point(x * cellSize + cellSize, y * cellSize + cellSize);
+                    else
+                        points[2] = new Point(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2);
+                    
+                    if (bl)
+                        points[3] = new Point(x * cellSize, y * cellSize + cellSize);
+                    else
+                        points[3] = new Point(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2);
+                    
                     g.FillPolygon(groundBrush, points);
                 }
 
             return bmp;
         }
 
-        private static CornerFill DetermineCornerFill(CellularAutomata<bool> automata, int x1, int y1, int x2, int y2)
+        private static bool ShouldFillCorner(CellularAutomata<bool> automata, int x1, int y1, int x2, int y2)
         {
             bool leftRight = automata.Constrain(ref x1, ref y1) ? automata.Data[x1, y1] : true;
             bool topBottom = automata.Constrain(ref x2, ref y2) ? automata.Data[x2, y2] : true;
 
             if (leftRight)
-                return topBottom ? CornerFill.Corner : CornerFill.Side;
-            return topBottom ? CornerFill.Top : CornerFill.None;
-        }
-
-        private enum CornerFill
-        {
-            None,
-            Corner,
-            Side,
-            Top,
+                return true;
+            return topBottom ? true : false;
         }
     }
 }
