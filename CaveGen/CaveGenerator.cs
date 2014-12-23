@@ -10,18 +10,57 @@ namespace CaveGen
 {
     public class CaveGenerator
     {
-        public CaveGenerator(int width, int height, int initialFillPercentage)
+        public CaveGenerator(int width, int height, GenerationMode mode)
         {
-            Random r = new Random();
-            var automata = new CellularAutomata<bool>(width, height, () => r.Next(100) < initialFillPercentage);
-            automata.BoundaryState = true;
-            automata.LoopHorizontal = true;
-            automata.LoopVertical = false;
+            int initialFillPercentage = 45;
 
-            automata.Iterate(GrowAndContract, 4);
-            automata.Iterate(Contract, 3);
-            Offset(automata);
+            Random r = new Random();
+            Automata = new CellularAutomata<bool>(width, height, () => r.Next(100) < initialFillPercentage);
+            Automata.BoundaryState = true;
+            Automata.LoopHorizontal = true;
+            Automata.LoopVertical = false;
+
+            switch(mode)
+            {
+                case GenerationMode.Bitty:
+                    Automata.Iterate(GrowAndContract, 2);
+                    Automata.Iterate(Contract, 1);
+                    break;
+                case GenerationMode.Blobby:
+                    Automata.Iterate(GrowAndContract, 4);
+                    Automata.Iterate(Contract, 3);
+                    break;
+                case GenerationMode.Twisty:
+                    Automata.Iterate(GrowAndContract, 5);
+                    Automata.Iterate(Contract, 1);
+                    break;
+                case GenerationMode.Turney:
+                    Automata.Iterate(GrowAndContract, 2);
+                    Automata.Iterate(Contract, 2);
+                    Automata.Iterate(GrowAndContract, 2);
+                    Automata.Iterate(Contract, 2);
+                    break;
+                case GenerationMode.Wriggly:
+                    Automata.Iterate(GrowAndContract, 4);
+                    Automata.Iterate(Contract, 3);
+                    Automata.Iterate(GrowAndContract, 2);
+                    Automata.Iterate(Contract, 1);
+                    break;
+            }
+
+            Offset(Automata);
         }
+
+        public enum GenerationMode
+        {
+            Bitty,
+            Blobby,
+            Twisty,
+            Turney,
+            Wriggly,
+        }
+
+        CellularAutomata<bool> Automata { get; set; }
 
         public static bool GrowAndContract(CellularAutomata<bool>.CellInfo cellInfo)
         {
