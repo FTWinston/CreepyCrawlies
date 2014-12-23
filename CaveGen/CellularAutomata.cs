@@ -8,7 +8,7 @@ namespace CaveGen
 {
     public class CellularAutomata<T> where T : struct
     {
-        public T[,] Data { get; private set; }
+        public T[,] Data { get; set; }
         public bool LoopHorizontal { get; set; }
         public bool LoopVertical { get; set; }
         public T BoundaryState { get; set; }

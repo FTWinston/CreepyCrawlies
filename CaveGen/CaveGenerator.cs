@@ -20,6 +20,7 @@ namespace CaveGen
 
             automata.Iterate(GrowAndContract, 4);
             automata.Iterate(Contract, 3);
+            Offset(automata);
         }
 
         public static bool GrowAndContract(CellularAutomata<bool>.CellInfo cellInfo)
@@ -110,6 +111,40 @@ namespace CaveGen
             if (leftRight)
                 return true;
             return topBottom ? true : false;
+        }
+
+        public static void Offset(CellularAutomata<bool> automata)
+        {
+            int width = automata.Data.GetLength(0), height = automata.Data.GetLength(1);
+            
+            int minIndex = -1, minSpaces = int.MaxValue;
+            for (int x = 0; x < width; x++)
+            {
+                int spaces = 0;
+                for (int y = 0; y < height; y++)
+                    if (!automata.Data[x, y])
+                        spaces++;
+
+                if (spaces < minSpaces)
+                {
+                    minIndex = x;
+                    minSpaces = spaces;
+                }
+            }
+            
+            if (minIndex == 0)
+                return;
+
+            var dataCopy = new bool[width, height];
+            for (int x = minIndex; x < width; x++)
+                for (int y = 0; y < height; y++)
+                    dataCopy[x - minIndex, y] = automata.Data[x, y];
+
+            for (int x = 0; x < minIndex; x++)
+                for (int y = 0; y < height; y++)
+                    dataCopy[width + x - minIndex, y] = automata.Data[x, y];
+
+            automata.Data = dataCopy;
         }
     }
 }

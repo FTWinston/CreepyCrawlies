@@ -68,5 +68,11 @@ namespace CavePreview
         {
             btnEnhance.Enabled = !chkAutoEnhance.Checked;
         }
+
+        private void btnOffset_Click(object sender, EventArgs e)
+        {
+            CaveGenerator.Offset(automata);
+            UpdateImage();
+        }
     }
 }
